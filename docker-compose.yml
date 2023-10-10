@@ -1,0 +1,11 @@
+version: '3'
+services:
+  easy-chat:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Укажите путь к вашему Dockerfile
+    ports:
+      - "5111:5111"
+    volumes:
+      - .:/app  # Монтируем текущую директорию внутрь контейнера
+
