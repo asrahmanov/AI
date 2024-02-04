@@ -5,8 +5,9 @@ import uuid
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, join_room
 
-from llama_index import VectorStoreIndex, SimpleDirectoryReader
+from llama_index import VectorStoreIndex, SimpleDirectoryReader, ServiceContext, GPTVectorStoreIndex
 
+from llama_index.llms import OpenAI
 
 
 
@@ -17,7 +18,18 @@ socketio = SocketIO(app)
 
 documents = SimpleDirectoryReader('Wiki/data').load_data()
 
-index = VectorStoreIndex.from_documents(documents, model="gpt-3.5-turbo-0125")
+
+# Изменим модель
+llm = OpenAI(temperature=0, model='gpt-3.5-turbo')
+
+service_context = ServiceContext.from_defaults(llm=llm)
+
+index = GPTVectorStoreIndex.from_documents(
+	documents,
+	service_context=service_context
+)
+
+
 
 query_engine = index.as_query_engine()
 
