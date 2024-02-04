@@ -16,7 +16,8 @@ app.static_folder = 'template/src'
 socketio = SocketIO(app)
 
 documents = SimpleDirectoryReader('Wiki/data').load_data()
-index = VectorStoreIndex.from_documents(documents)
+
+index = VectorStoreIndex.from_documents(documents, model="gpt-3.5-turbo-0125")
 
 query_engine = index.as_query_engine()
 
