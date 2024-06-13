@@ -6,7 +6,6 @@ from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, join_room
 
 from llama_index import VectorStoreIndex, SimpleDirectoryReader, ServiceContext, GPTVectorStoreIndex
-
 from llama_index.llms import OpenAI
 
 
@@ -43,12 +42,13 @@ def on_connect():
     join_room(room_id)  # Добавляем пользователя в комнату с его идентификатором сессии
 @socketio.on('query')
 def handle_query(data):
-    query = data.get('query')  # Получаем значение поля 'query' из словаря data
+    query = "Ответь на русском: " + data.get('query')  # Получаем значение поля 'query' из словаря data
     room_id = request.sid  # Получаем уникальный идентификатор сессии пользователя
 
     try:
         response = query_engine.query(query)
         response_text = str(response)
+        response_text =  response_text
     except Exception as e:
         response_text = f"Error during query processing: {str(e)}"
 
